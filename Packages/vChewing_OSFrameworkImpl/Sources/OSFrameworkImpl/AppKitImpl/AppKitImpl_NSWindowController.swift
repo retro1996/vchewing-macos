@@ -65,6 +65,10 @@ import SwiftExtension
       .ModalResponse {
       (self as NSWindow?).callAlert(title: title, text: text)
     }
+
+    public func reportSelfAsVoiceOverNotFocusable() {
+      (self as NSWindow?).reportSelfAsVoiceOverNotFocusable()
+    }
   }
 
   extension NSWindow? {
@@ -81,6 +85,26 @@ import SwiftExtension
         result = theResponce
       }
       return result
+    }
+
+    public func reportSelfAsVoiceOverNotFocusable() {
+      guard let window = self else { return }
+      // Hide window from VoiceOver focus
+      window.setAccessibilityElement(false)
+      window.setAccessibilityRole(.unknown)
+
+      // Recursively hide all subviews from VO's visible perimiter.
+      window.contentView?.reportSelfAsVoiceOverNotFocusable()
+    }
+  }
+
+  extension NSView {
+    // Recursively hide all subviews
+    func reportSelfAsVoiceOverNotFocusable() {
+      setAccessibilityElement(false)
+      for subview in subviews {
+        subview.reportSelfAsVoiceOverNotFocusable()
+      }
     }
   }
 
