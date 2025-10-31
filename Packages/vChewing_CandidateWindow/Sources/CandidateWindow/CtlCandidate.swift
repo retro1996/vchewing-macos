@@ -15,6 +15,7 @@ open class CtlCandidate: NSWindowController, CtlCandidateProtocol {
 
   public required init(_: UILayoutOrientation = .horizontal) {
     super.init(window: .init())
+    window?.reportSelfAsVoiceOverNotFocusable()
     self.visible = false
   }
 

@@ -69,6 +69,7 @@ public class CtlCandidateTDK: CtlCandidate, NSWindowDelegate {
   public static var currentWindow: NSWindow? {
     willSet {
       currentWindow?.orderOut(nil)
+      newValue.reportSelfAsVoiceOverNotFocusable()
     }
   }
 
@@ -87,6 +88,9 @@ public class CtlCandidateTDK: CtlCandidate, NSWindowDelegate {
 
   override public func updateDisplay() {
     guard let window = window else { return }
+    defer {
+      window.reportSelfAsVoiceOverNotFocusable()
+    }
     asyncOnMain { [weak self] in
       guard let self = self else { return }
       self.updateNSWindowModern(window)
